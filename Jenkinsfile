@@ -8,7 +8,7 @@ pipeline {
 
         stage('Prepare SCM') {
             steps {
-                git branch: 'master', url: 'https://github.com/praveenkumar1290/sonar-coverage-example-java.git'
+                git branch: 'master', url: 'https://github.com/PVVVR/sonar-coverage-example-java.git'
             }
         }
         stage ('Build') {
