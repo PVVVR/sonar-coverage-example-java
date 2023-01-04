@@ -15,11 +15,7 @@ pipeline {
             steps {
                 bat 'mvn -Dmaven.test.failure.ignore=true install' 
             }
-            post {
-                success {
-                    junit 'target/surefire-reports/**/*.xml' 
-                }
-            }
+            
         }
         stage('Sonarqube') {
             environment {
