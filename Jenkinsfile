@@ -23,7 +23,8 @@ pipeline {
             }
             steps {
                 withSonarQubeEnv('sonarqube') {
-                    bat 'C:/jba/tools/sonar-scanner-4.3.0.2102/bin/sonar-scanner.bat -D sonar.projectKey=sonar-coverage-example-java'
+                    //bat 'C:/jba/tools/sonar-scanner-4.3.0.2102/bin/sonar-scanner.bat -D sonar.projectKey=sonar-coverage-example-java'
+                    bat 'mvn clean verify sonar:sonar -Dsonar.projectKey=sonar-coverage-example-java'
                 }
             }
         }
