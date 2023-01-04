@@ -1,36 +1,36 @@
 pipeline {
     agent any
     tools {
-        jdk 'jdk10'
-        maven 'M3'
+        maven 'maven3.8.6'
+        jdk 'jdk'
     }
-
-    environment {
-        JAVA_HOME = "${jdk}"
-    }
-
     stages {
-        stage('Prepare') {
+
+        stage('Prepare SCM') {
             steps {
-                checkout scm
+                git branch: 'master', url: 'https://github.com/praveenkumar1290/sonar-coverage-example-java.git'
             }
         }
-
-        stage('Test') {
+        stage ('Build') {
             steps {
-                sh 'mvn install'
+                bat 'mvn -Dmaven.test.failure.ignore=true install' 
             }
-        }
-
-        stage('QA') {
-            steps {
-                withSonarQubeEnv('sonar') {
-                    script {
-                        def scannerHome = tool 'sonarqube-scanner'
-                        sh "${scannerHome}/bin/sonar-scanner"
-                    }
+            post {
+                success {
+                    junit 'target/surefire-reports/**/*.xml' 
                 }
             }
         }
+        stage('Sonarqube') {
+            environment {
+                scannerHome = tool 'sonarqube'
+            }
+            steps {
+                withSonarQubeEnv('sonarqube') {
+                    bat 'C:/jba/tools/sonar-scanner-4.3.0.2102/bin/sonar-scanner.bat -D sonar.projectKey=java-maven-junit-helloworld -D sonar.exclusions=**/src/**/*.java'
+                }
+            }
+        }
+        
     }
 }
